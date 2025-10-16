@@ -34,7 +34,7 @@ The installation is straightforward.
 
 ## 🎧 How to Download Playlists
 
-This tool works by using a playlist exported as a **CSV** file. If you already have a compatible `.CSV` file, skip to Step 6.
+This tool works by using a playlist exported as a **CSV** file. If you already have a compatible `.CSV` file, skip to Part 2.
 
 ### **Part 1: Exporting Your Playlist (via TuneMyMusic)**
 
@@ -81,11 +81,17 @@ This tool works by using a playlist exported as a **CSV** file. If you already h
 
     <img width="904" height="31" alt="image" src="https://github.com/user-attachments/assets/d9f1a45a-d3aa-4c2f-a2d8-3abc0cad49e3" />
 
-11. Finally, click the button to select the **CSV** file you exported earlier.
+
+11. Choose if how many songs you want to download concurrently.
+
+   <img width="247" height="38" alt="image" src="https://github.com/user-attachments/assets/dae5a198-d682-461b-b107-3d8f91737c3e" />
+
+
+12. Finally, click the button to select the **CSV** file you exported earlier.
 
     <img width="904" height="45" alt="image" src="https://github.com/user-attachments/assets/73d32ca8-efc2-4c67-9c08-c6276475c2f8" />
 
-12. Click **Start Download** and watch it work!
+13. Click **Start Download** and watch it work!
 
 ## 🚀 Key Features
 
