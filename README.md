@@ -18,7 +18,7 @@ Please read this before running the application:
 
 The installation is straightforward.
 
-1. Head to the [releases page](https://github.com/Minxify/Spotify-downloader-GUI/releases) or click **\[here\]** to download the installer for your system.
+1. Head to the [releases page](https://github.com/Minxify/Spotify-downloader-GUI/releases) to download the installer for your system.
 
 2. Download the `Install-Windows.bat` or `Install-Linux.sh` file.
 
