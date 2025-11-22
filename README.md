@@ -1,3 +1,7 @@
+## ⚠️ CURRENTLY BROKEN DUE TO UPDATE IN SPOTDL!!⚠️
+**i will update this programm as soon as i have time for it!**
+
+
 # ✨ Spotify Downloader GUI for SpotDL
 
 **A Cross-Platform Graphical Interface for Downloading Your Spotify Library**
