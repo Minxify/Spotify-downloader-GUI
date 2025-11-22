@@ -28,10 +28,10 @@ The installation is straightforward.
 
 3. **On Windows:** Double-click the `.bat` file to run the installer.
 
-4. **On Linux:** You may need to make the script executable. Open your terminal (like **Kitty** on Arch Linux) and run the following commands:
+4. **On Linux:** You may need to make the script executable. Open your terminal and run the following commands:
 
    ```bash
-   cd Downloads
+   cd Downloads #or wherever you have saved the file!
    chmod +x Install-Linux.sh
    ./Install-Linux.sh
    ```
@@ -46,7 +46,7 @@ This tool works by using a playlist exported as a **CSV** file. If you already h
 
    <img width="1914" height="958" alt="image" src="https://github.com/user-attachments/assets/86294d76-b438-4172-b88a-7193a4d6229b" />
 
-2. Log into Spotify. (This service is verified and safe; no personal data is transferred outside of the files you choose.) Once logged in, click **"Choose from Spotify account"**.
+2. Log into Spotify. (This service is verified and safe; no personal data is transferred outside of the files you choose.) Once logged in, click **"Load from Spotify account"**.
 
    <img width="943" height="566" alt="image" src="https://github.com/user-attachments/assets/4c8d1b34-18c1-4e3d-8155-89afb5381d59" />
 
