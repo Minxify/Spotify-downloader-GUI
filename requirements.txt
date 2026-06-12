@@ -1,0 +1,6 @@
+customtkinter>=5.2.0
+spotdl>=4.5.0
+spotipy>=2.26.0
+# Optional:
+# pystray>=0.19.0  # system tray support
+# Pillow>=10.0.0   # tray icon (also used by customtkinter)

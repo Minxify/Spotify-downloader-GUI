@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpotDL GUI — Setup Guide</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --surface: #16213e;
+    --card: #0f3460;
+    --accent: #e94560;
+    --green: #2ecc71;
+    --text: #eee;
+    --muted: #8892b0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem 1rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  h1 { font-size: 2rem; margin-bottom: .3rem; }
+  h1 small { font-size: 1rem; color: var(--muted); font-weight: 400; }
+  h2 { font-size: 1.3rem; margin: 1.5rem 0 .5rem; padding-bottom: .3rem; border-bottom: 2px solid var(--accent); }
+  h3 { font-size: 1.1rem; margin: 1.2rem 0 .4rem; }
+  p  { margin: .5rem 0; }
+
+  a { color: var(--accent); }
+
+  .tagline { color: var(--muted); margin-bottom: 1.5rem; }
+
+  .steps {
+    display: flex; gap: .5rem; margin: 1.5rem 0;
+    counter-reset: step;
+  }
+  .steps .step {
+    flex: 1; text-align: center; padding: .5rem;
+    background: var(--surface); border-radius: 8px;
+    font-size: .85rem; color: var(--muted);
+    counter-increment: step;
+    transition: .2s;
+  }
+  .steps .step::before {
+    content: counter(step);
+    display: block; font-size: 1.4rem; font-weight: 700;
+    color: var(--accent); margin-bottom: .2rem;
+  }
+  .steps .step.active { background: var(--card); color: #fff; }
+
+  .picker { display: flex; gap: .75rem; margin: 1rem 0 1.5rem; }
+  .picker button {
+    flex: 1; padding: .9rem; border: 2px solid var(--surface);
+    border-radius: 10px; background: var(--surface);
+    color: var(--muted); font-size: 1.1rem; font-weight: 600;
+    cursor: pointer; transition: .2s;
+  }
+  .picker button:hover { border-color: var(--accent); color: #fff; }
+  .picker button.selected { border-color: var(--accent); background: var(--card); color: #fff; }
+
+  .toggle-wrap { display: flex; gap: .5rem; margin: 1rem 0 1.5rem; }
+  .toggle-wrap button {
+    flex: 1; padding: .7rem; border: 2px solid var(--surface);
+    border-radius: 8px; background: var(--surface);
+    color: var(--muted); font-size: .95rem; cursor: pointer; transition: .2s;
+  }
+  .toggle-wrap button:hover { border-color: var(--green); color: #fff; }
+  .toggle-wrap button.selected { border-color: var(--green); background: #1a3a2e; color: #fff; }
+
+  .content { display: none; margin-top: 1rem; }
+  .content.visible { display: block; }
+
+  .card {
+    background: var(--surface);
+    border-radius: 10px; padding: 1.2rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card.warn  { border-left: 4px solid #f39c12; }
+  .card.info  { border-left: 4px solid #3498db; }
+  .card.good  { border-left: 4px solid var(--green); }
+  .card.err   { border-left: 4px solid var(--accent); }
+
+  .card code, .card pre {
+    background: rgba(0,0,0,.4);
+    padding: .15em .4em; border-radius: 4px;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: .9em;
+  }
+  .card pre {
+    display: block; padding: .8rem 1rem; margin: .6rem 0;
+    overflow-x: auto; white-space: pre-wrap;
+  }
+
+  ul, ol { padding-left: 1.5rem; margin: .5rem 0; }
+  li { margin: .3rem 0; }
+  img { max-width: 100%; border-radius: 6px; margin: .8rem 0; }
+
+  .inline-code {
+    background: rgba(0,0,0,.4);
+    padding: .15em .4em; border-radius: 4px;
+    font-family: monospace; font-size: .9em;
+  }
+
+  .log-box {
+    background: #0d0d1a; border: 1px solid #333;
+    border-radius: 6px; padding: 1rem;
+    font-family: monospace; font-size: .85rem;
+    white-space: pre-wrap; margin: .6rem 0;
+  }
+
+  @media (max-width: 600px) {
+    .picker { flex-direction: column; }
+    .toggle-wrap { flex-direction: column; }
+    body { padding: 1rem; }
+  }
+
+  .cmd { user-select: all; }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: .75rem;
+    margin: 1rem 0;
+  }
+  .feature-card {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #2a2a4a;
+  }
+  .feature-card h4 { color: var(--accent); margin-bottom: .3rem; }
+  .feature-card p { color: var(--muted); font-size: .9rem; margin: 0; }
+</style>
+</head>
+<body>
+
+<h1>SpotDL GUI <small>v3.0 — Setup &amp; Install</small></h1>
+<p class="tagline">A cross-platform GUI + CLI for downloading Spotify playlists using spotDL.<br>
+Search, paste a link, import CSV — with concurrent downloads, format selection, lyrics, scheduling, and more.</p>
+
+<div class="steps">
+  <div class="step">Choose OS</div>
+  <div class="step">Choose experience</div>
+  <div class="step">Install &amp; run</div>
+</div>
+
+<h2>0. New in v3.0</h2>
+
+<div class="feature-grid">
+  <div class="feature-card">
+    <h4>🔍 Search</h4>
+    <p>Search Spotify by track/album/artist inside the app. Requires Spotify sign-in.</p>
+  </div>
+  <div class="feature-card">
+    <h4>🧠 Smart mode</h4>
+    <p>Paste any Spotify URL — track, album, playlist, artist — auto-detected and handled.</p>
+  </div>
+  <div class="feature-card">
+    <h4>🎵 Format + bitrate</h4>
+    <p>mp3, flac, ogg, opus, m4a, wav with grouped bitrate presets and fine-tune expand.</p>
+  </div>
+  <div class="feature-card">
+    <h4>📝 Lyrics</h4>
+    <p>Optional lyrics download with provider selection (genius, musixmatch, etc.).</p>
+  </div>
+  <div class="feature-card">
+    <h4>📁 Folder structure</h4>
+    <p>By playlist, by artist/album, or flat — whichever you prefer.</p>
+  </div>
+  <div class="feature-card">
+    <h4>📦 Batch queue</h4>
+    <p>Add multiple playlists/albums, sequential or parallel mode.</p>
+  </div>
+  <div class="feature-card">
+    <h4>⏯️ Pause + per-track cancel</h4>
+    <p>Pause the whole queue or cancel individual tracks with a × button.</p>
+  </div>
+  <div class="feature-card">
+    <h4>📐 Size estimation</h4>
+    <p>See per-track (~X MB/3min) and total estimated download size.</p>
+  </div>
+  <div class="feature-card">
+    <h4>⏰ Scheduling</h4>
+    <p>One-time scheduled downloads + playlist watcher for new tracks.</p>
+  </div>
+  <div class="feature-card">
+    <h4>💾 Presets</h4>
+    <p>Save settings as named presets. Auto-loads last used on startup.</p>
+  </div>
+  <div class="feature-card">
+    <h4>🔐 Spotify sign-in</h4>
+    <p>Browser OAuth (PKCE) — no passwords shared. Access private playlists.</p>
+  </div>
+  <div class="feature-card">
+    <h4>🔔 Notifications</h4>
+    <p>Choose: on complete only, +on error, or every track (+ warning for large playlists).</p>
+  </div>
+  <div class="feature-card">
+    <h4>🖥️ System tray</h4>
+    <p>Minimize to tray, background downloads. (Requires pystray.)</p>
+  </div>
+  <div class="feature-card">
+    <h4>📜 Export .sh</h4>
+    <p>Generate a bash script to SCP + run on a remote server.</p>
+  </div>
+  <div class="feature-card">
+    <h4>🔄 Resume</h4>
+    <p>Close mid-download? State saved to ~/.cache/spotdl-gui/. Resume on next launch.</p>
+  </div>
+  <div class="feature-card">
+    <h4>⌨️ CLI mode</h4>
+    <p>Headless downloader: python cli.py --input playlist.csv --format flac</p>
+  </div>
+</div>
+
+<!-- OS selection -->
+<h2>1. What operating system are you on?</h2>
+<div class="picker" id="osPicker">
+  <button data-os="linux">🐧 Linux</button>
+  <button data-os="macos">🍏 macOS</button>
+  <button data-os="windows">🪟 Windows</button>
+</div>
+
+<!-- User type -->
+<div id="userTypeSection" style="display:none">
+  <h2>2. What kind of user are you?</h2>
+  <div class="toggle-wrap" id="userPicker">
+    <button data-mode="basic">👶 Basic — show me everything step by step, explain errors, help me fix things</button>
+    <button data-mode="advanced">🧑‍💻 Advanced — just give me the commands, I know my system</button>
+  </div>
+</div>
+
+<!-- ==================== CONTENT ==================== -->
+
+<!-- LINUX — BASIC -->
+<div class="content" data-content="linux-basic">
+  <h2>3. Install &amp; Run (Linux — Basic)</h2>
+
+  <div class="card info">
+    <strong>What we're going to do:</strong> Install Python &amp; FFmpeg, create a virtual environment
+    (<span class="inline-code">venv</span>), install dependencies, and launch the app.
+    The <span class="inline-code">venv</span> keeps everything isolated — no risk of breaking your system Python.
+  </div>
+
+  <h3>Step 1 — Install FFmpeg</h3>
+  <p>FFmpeg handles audio conversion. Open a terminal and run the command for your distro:</p>
+
+  <div class="card">
+    <strong>Arch Linux / Manjaro / EndeavourOS</strong>
+    <pre class="cmd">sudo pacman -S ffmpeg</pre>
+    <p>Enter your password when prompted, type <span class="inline-code">y</span> to confirm.</p>
+  </div>
+
+  <div class="card">
+    <strong>Debian / Ubuntu / Linux Mint / Pop!_OS</strong>
+    <pre class="cmd">sudo apt update && sudo apt install ffmpeg -y</pre>
+  </div>
+
+  <div class="card">
+    <strong>Fedora</strong>
+    <pre class="cmd">sudo dnf install ffmpeg</pre>
+  </div>
+
+  <div class="card">
+    <strong>openSUSE</strong>
+    <pre class="cmd">sudo zypper install ffmpeg</pre>
+  </div>
+
+  <h3>Step 2 — Make sure Python 3 is installed</h3>
+  <pre class="cmd">python3 --version</pre>
+  <p>If you see <span class="inline-code">Python 3.9+</span> you're good. If not, install it:</p>
+  <pre class="cmd">sudo pacman -S python     # Arch
+sudo apt install python3  # Debian/Ubuntu
+sudo dnf install python3  # Fedora</pre>
+
+  <h3>Step 3 — Run the setup</h3>
+  <pre class="cmd">chmod +x setup.sh
+./setup.sh</pre>
+  <p>This creates a <span class="inline-code">venv/</span> folder and installs everything inside it.</p>
+
+  <div class="card info">
+    <strong>What's a venv?</strong> A virtual environment is like a sandbox — Python packages
+    are installed here instead of system-wide. If something breaks, just delete the
+    <span class="inline-code">venv/</span> folder and re-run <span class="inline-code">setup.sh</span>.
+  </div>
+
+  <h3>Step 4 — Launch the app</h3>
+  <pre class="cmd">./start.sh</pre>
+  <p>The GUI window should appear. If you get an error about a display, make sure you're running
+  a desktop environment (not SSH without X forwarding).</p>
+
+  <h3>Step 5 — (Optional) Sign in with Spotify</h3>
+  <div class="card good">
+    <p>Click <strong>"Sign in with Spotify ▸"</strong> in the top-right corner of the app.</p>
+    <ol>
+      <li>On first use, a wizard opens — click the link to create a Spotify App at
+        <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a></li>
+      <li>Set the app's redirect URI to <span class="inline-code">http://localhost:8888/callback</span></li>
+      <li>Copy the <strong>Client ID</strong> and paste it into the wizard</li>
+      <li>Your browser opens — authorize the app. Token is cached for next time.</li>
+    </ol>
+    <p>This enables search, private playlists, liked songs, and saved albums.</p>
+  </div>
+
+  <h3>Step 6 — (Optional) Enable system tray</h3>
+  <pre class="cmd">source venv/bin/activate
+pip install pystray
+deactivate</pre>
+  <p>Then restart the app. A "Minimize to Tray" button appears.</p>
+
+  <h2>Error Log Support</h2>
+  <div class="card err">
+    <strong>Something went wrong?</strong> Here's how to figure it out.
+  </div>
+
+  <h3>Check the terminal output</h3>
+  <p>When you run <span class="inline-code">./start.sh</span>, errors appear in the terminal.
+  Copy the full output — it includes Python tracebacks that tell us exactly what broke.</p>
+
+  <h3>Check setup logs</h3>
+  <pre class="cmd">rm -rf venv
+./setup.sh 2>&1 | tee setup-log.txt</pre>
+
+  <h3>Download error logs</h3>
+  <p>Look for <span class="inline-code">ERROR_*.log</span> files in the parent of your output folder.
+  Each entry shows which track failed and why.</p>
+  <div class="log-box">Song Name by Artist failed. Query: '...'. Error: spotdl failed (Exit Code 1). Output: ...</div>
+
+  <h3>Common issues</h3>
+  <div class="card warn">
+    <strong>"No module named 'customtkinter'"</strong><br>
+    The venv wasn't created or got deleted. Re-run <span class="inline-code">./setup.sh</span>.
+  </div>
+  <div class="card warn">
+    <strong>"spotdl: command not found"</strong><br>
+    Same fix — re-run <span class="inline-code">./setup.sh</span>.
+  </div>
+  <div class="card warn">
+    <strong>"ffmpeg: command not found"</strong><br>
+    FFmpeg isn't installed. Go back to Step 1 and install it for your distro.
+  </div>
+  <div class="card warn">
+    <strong>"Cannot open display"</strong><br>
+    You're in a headless environment (no desktop). Use the CLI instead:
+    <pre class="cmd">python cli.py --input playlist.csv --format mp3 --output ./music</pre>
+  </div>
+</div>
+
+<!-- LINUX — ADVANCED -->
+<div class="content" data-content="linux-advanced">
+  <h2>3. Install &amp; Run (Linux — Advanced)</h2>
+
+  <div class="card">
+    <p><strong>FFmpeg:</strong></p>
+    <pre class="cmd">sudo pacman -S ffmpeg        # Arch
+sudo apt install ffmpeg     # Debian/Ubuntu
+sudo dnf install ffmpeg     # Fedora</pre>
+  </div>
+
+  <div class="card good">
+    <strong>Then, one-liner:</strong>
+    <pre class="cmd">./setup.sh && ./start.sh</pre>
+  </div>
+
+  <div class="card info">
+    <strong>Optional — enable system tray:</strong>
+    <pre class="cmd">source venv/bin/activate && pip install pystray && deactivate</pre>
+  </div>
+
+  <div class="card info">
+    <strong>Headless CLI (no display needed):</strong>
+    <pre class="cmd">python cli.py --input "https://open.spotify.com/playlist/..." --format flac --output ./music</pre>
+  </div>
+</div>
+
+<!-- macOS — BASIC -->
+<div class="content" data-content="macos-basic">
+  <h2>3. Install &amp; Run (macOS — Basic)</h2>
+
+  <div class="card info">
+    <strong>What we're going to do:</strong> Install Homebrew (if you don't have it), install FFmpeg,
+    make sure Python 3 is available, then run the setup script.
+  </div>
+
+  <h3>Step 1 — Install Homebrew (if needed)</h3>
+  <pre class="cmd">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</pre>
+
+  <h3>Step 2 — Install FFmpeg</h3>
+  <pre class="cmd">brew install ffmpeg</pre>
+
+  <h3>Step 3 — Check Python 3</h3>
+  <pre class="cmd">python3 --version</pre>
+  <p>macOS 12.3+ includes Python 3. If missing: <span class="inline-code">brew install python@3</span>.</p>
+
+  <h3>Step 4 — Run the setup</h3>
+  <pre class="cmd">chmod +x setup.sh
+./setup.sh</pre>
+
+  <h3>Step 5 — Launch the app</h3>
+  <pre class="cmd">./start.sh</pre>
+
+  <h3>Step 6 — (Optional) Sign in with Spotify</h3>
+  <div class="card good">
+    <p>Click <strong>"Sign in with Spotify ▸"</strong> in the app.<br>
+    Create a Spotify App at <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a>,
+    set redirect URI to <span class="inline-code">http://localhost:8888/callback</span>,
+    paste the Client ID into the wizard. Your browser opens — authorize once, token cached.</p>
+  </div>
+
+  <h2>Error Log Support</h2>
+  <div class="card err">
+    <strong>Something went wrong?</strong> Here's how to debug.
+  </div>
+
+  <h3>Terminal errors</h3>
+  <p>Copy-paste the full terminal output from <span class="inline-code">./setup.sh</span> or
+  <span class="inline-code">./start.sh</span> — that's the fastest way to get help.</p>
+
+  <h3>Re-run setup with logging</h3>
+  <pre class="cmd">rm -rf venv
+./setup.sh 2>&1 | tee setup-log.txt</pre>
+
+  <h3>Download error logs</h3>
+  <p>Look for <span class="inline-code">ERROR_*.log</span> files in the parent of your output folder.</p>
+
+  <h3>Common issues</h3>
+  <div class="card warn">
+    <strong>"No module named 'customtkinter'"</strong> → re-run <span class="inline-code">./setup.sh</span>
+  </div>
+  <div class="card warn">
+    <strong>"spotdl: command not found"</strong> → re-run <span class="inline-code">./setup.sh</span>
+  </div>
+  <div class="card warn">
+    <strong>"ffmpeg: command not found"</strong> → <span class="inline-code">brew install ffmpeg</span>
+  </div>
+  <div class="card warn">
+    <strong>"Permission denied"</strong> → <span class="inline-code">chmod +x setup.sh start.sh</span>
+  </div>
+</div>
+
+<!-- macOS — ADVANCED -->
+<div class="content" data-content="macos-advanced">
+  <h2>3. Install &amp; Run (macOS — Advanced)</h2>
+
+  <div class="card">
+    <pre class="cmd">brew install ffmpeg
+./setup.sh && ./start.sh</pre>
+  </div>
+
+  <p>Make sure Python 3 is installed (<span class="inline-code">python3 --version</span>).
+  If missing: <span class="inline-code">brew install python@3</span>.</p>
+
+  <div class="card info">
+    <strong>Headless CLI:</strong>
+    <pre class="cmd">python cli.py --input playlist.csv --format flac --output ./music</pre>
+  </div>
+</div>
+
+<!-- WINDOWS — BASIC -->
+<div class="content" data-content="windows-basic">
+  <h2>3. Install &amp; Run (Windows — Basic)</h2>
+
+  <div class="card info">
+    <strong>What we're going to do:</strong> Install Python, install FFmpeg, run the setup batch file,
+    then launch the app. Everything is explained step by step.
+  </div>
+
+  <h3>Step 1 — Install Python 3</h3>
+  <ol>
+    <li>Go to <strong><a href="https://www.python.org/downloads/" target="_blank">python.org/downloads</a></strong></li>
+    <li>Click the big yellow <strong>Download Python</strong> button</li>
+    <li>Run the installer</li>
+    <li><strong>IMPORTANT:</strong> Check <strong>"Add Python to PATH"</strong> at the bottom</li>
+    <li>Click <strong>"Install Now"</strong></li>
+  </ol>
+
+  <div class="card warn">
+    <strong>Did you forget to check "Add Python to PATH"?</strong> Uninstall Python and re-install with that box checked.
+  </div>
+
+  <h3>Step 2 — Install FFmpeg</h3>
+  <ol>
+    <li>Download FFmpeg from <strong><a href="https://ffmpeg.org/download.html" target="_blank">ffmpeg.org/download.html</a></strong>
+      — choose "Windows Builds", download a release build</li>
+    <li>Extract to <span class="inline-code">C:\ffmpeg</span></li>
+    <li>Add <span class="inline-code">C:\ffmpeg\bin</span> to your system PATH
+      (System Properties → Advanced → Environment Variables → Path → New)</li>
+  </ol>
+  <p>Verify: open Command Prompt and run <span class="inline-code">ffmpeg -version</span></p>
+
+  <h3>Step 3 — Run setup.bat</h3>
+  <p>Double-click <span class="inline-code">setup.bat</span> in the project folder.
+  <strong>Do not close the window</strong> until it says "Done!"</p>
+
+  <div class="card info">
+    If you see a Windows SmartScreen warning, click <strong>"More info"</strong> →
+    <strong>"Run anyway"</strong>. The script only installs Python packages — it's safe.
+  </div>
+
+  <h3>Step 4 — Launch the app</h3>
+  <p>Double-click <span class="inline-code">start.bat</span>.</p>
+
+  <h3>Step 5 — (Optional) Sign in with Spotify</h3>
+  <div class="card good">
+    <p>Click <strong>"Sign in with Spotify ▸"</strong> in the app.<br>
+    Create a Spotify App at <a href="https://developer.spotify.com/dashboard" target="_blank">developer.spotify.com/dashboard</a>,
+    set redirect URI to <span class="inline-code">http://localhost:8888/callback</span>,
+    paste the Client ID into the wizard. Your browser opens — authorize once, token cached.</p>
+  </div>
+
+  <h2>Error Log Support</h2>
+  <div class="card err">
+    <strong>Something went wrong?</strong> Here's how to debug.
+  </div>
+
+  <h3>Take a screenshot</h3>
+  <p>If <span class="inline-code">setup.bat</span> or <span class="inline-code">start.bat</span>
+  shows an error, take a screenshot (<kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>) and share it.</p>
+
+  <h3>Download error logs</h3>
+  <p>Look for <span class="inline-code">ERROR_*.log</span> files in the parent of your output folder.</p>
+
+  <h3>Common issues</h3>
+  <div class="card warn">
+    <strong>"'python' is not recognized"</strong> — Python isn't on your PATH. Reinstall and check "Add to PATH".
+  </div>
+  <div class="card warn">
+    <strong>"ffmpeg: command not found"</strong> — check <span class="inline-code">C:\ffmpeg\bin</span> in PATH.
+  </div>
+  <div class="card warn">
+    <strong>Windows SmartScreen blocked it</strong> — click "More info" → "Run anyway".
+  </div>
+</div>
+
+<!-- WINDOWS — ADVANCED -->
+<div class="content" data-content="windows-advanced">
+  <h2>3. Install &amp; Run (Windows — Advanced)</h2>
+
+  <div class="card">
+    <ol>
+      <li>Install <a href="https://www.python.org/downloads/" target="_blank">Python 3</a>
+        — <strong>check "Add Python to PATH"</strong></li>
+      <li>Install <a href="https://ffmpeg.org/download.html" target="_blank">FFmpeg</a>,
+        add <span class="inline-code">C:\ffmpeg\bin</span> to PATH</li>
+      <li>Double-click <span class="inline-code">setup.bat</span></li>
+      <li>Double-click <span class="inline-code">start.bat</span></li>
+    </ol>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<hr style="margin:3rem 0 1rem; border-color:#333;">
+<p style="color:var(--muted); font-size:.85rem; text-align:center;">
+  Spotify Downloader GUI v3.0 © 2026 Minxify_ig —
+  <a href="https://minxie.likesyou.org">minxie.likesyou.org</a> —
+  <a href="https://github.com/Minxify/Spotify-downloader-GUI">GitHub</a>
+</p>
+
+<script>
+let os = null;
+let mode = null;
+
+const osPicker   = document.getElementById('osPicker');
+const userPicker = document.getElementById('userPicker');
+const userSection = document.getElementById('userTypeSection');
+const steps = document.querySelectorAll('.steps .step');
+const allContent = document.querySelectorAll('.content');
+
+function updateSteps(step) {
+  steps.forEach((s, i) => s.classList.toggle('active', i < step));
+}
+
+function showContent() {
+  allContent.forEach(c => c.classList.remove('visible'));
+  if (os && mode) {
+    const target = document.querySelector(`[data-content="${os}-${mode}"]`);
+    if (target) target.classList.add('visible');
+    updateSteps(3);
+  } else if (os) {
+    updateSteps(2);
+  } else {
+    updateSteps(1);
+  }
+}
+
+osPicker.addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  osPicker.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  os = btn.dataset.os;
+  userSection.style.display = 'block';
+  if (mode) showContent();
+  else updateSteps(2);
+});
+
+userPicker.addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  userPicker.querySelectorAll('button').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  mode = btn.dataset.mode;
+  showContent();
+  const visible = document.querySelector('.content.visible');
+  if (visible) visible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
+</body>
+</html>
