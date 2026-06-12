@@ -1,130 +1,318 @@
-# ✨ Spotify Downloader GUI for SpotDL
+# Spotify Downloader GUI for SpotDL
 
-**A Cross-Platform Graphical Interface for Downloading Your Spotify Library**
+**A cross-platform GUI + CLI for downloading Spotify playlists, albums, artists, and tracks.**  
+Search, paste a link, or import CSV — with concurrent downloads, format selection, lyrics, scheduling, and more.
 
-*By © 2025-2026 Minxify_ig*
+By [Minxify_ig](https://minxie.likesyou.org) | [GitHub](https://github.com/Minxify/Spotify-downloader-GUI)
 
-# This readme is old. i need to update it.
+---
 
-## ⚠️ Disclaimer & Important Notes
+## Quick Start
 
-Please read this before running the application:
+```bash
+# Linux / macOS
+./setup.sh && ./start.sh
 
-* **Potential Freezing:** The application **will appear to freeze** during downloads, especially when processing large lists. **It is NOT frozen.** Please be patient.
+# Windows — double-click setup.bat, then start.bat
+```
 
-* **Performance:** Users with **low-end computers** may experience significant slowdowns or potential crashes.
+---
 
-* **Liability:** Use at your own risk. I am not responsible for any damage to your computer from executing this program. The full source code is available in this repository for review.
+## Prerequisites
 
-## 🖥️ Installation
+- **Python 3.9+** ([python.org](https://www.python.org/downloads/))
+- **FFmpeg** (audio processing)
 
-The installation is straightforward.
+### Installing FFmpeg
 
-1. Head to the [releases page](https://github.com/Minxify/Spotify-downloader-GUI/releases) to download the installer for your system.
+| OS | Command |
+|---|---|
+| Arch / Manjaro | `sudo pacman -S ffmpeg` |
+| Debian / Ubuntu | `sudo apt install ffmpeg` |
+| Fedora | `sudo dnf install ffmpeg` |
+| macOS (Homebrew) | `brew install ffmpeg` |
+| Windows | Download from [ffmpeg.org](https://ffmpeg.org/download.html), add to PATH |
 
-2. Download the `Install-Windows.bat` or `Install-Linux.sh` file.
+---
 
-3. **On Windows:** Double-click the `.bat` file to run the installer.
+## What's new in v3.0
 
-4. **On Linux:** You may need to make the script executable. Open your terminal and run the following commands:
+### Two views — settings hidden during download
 
-   ```bash
-   cd Downloads #or wherever you have saved the file!
-   chmod +x Install-Linux.sh
-   ./Install-Linux.sh
-   ```
+When you hit download, the app switches from the full settings UI to a **dedicated download view**:
 
-## 🎧 How to Download Playlists
+```
+┌─ Download Progress ──────────────────────────┐
+│ ▓▓▓▓▓▓▓▓▓▓░░░░░░░░░  12 / 25 (48.0%)        │
+│ ETA: 2m 35s  |  Est. ~180MB  |  Errors: 0   │
+│ Current: Song Title — Artist                  │
+├─ Track Queue ────────────────────────────────┤
+│ ▶ Song One — Artist A                [×]    │
+│ ⬜ Song Two — Artist B                [×]    │
+│ ⬜ Song Three — Artist C              [×]    │
+│ ⬜ Song Four — Artist D               [×]    │
+│ ⬜ Song Five — Artist E               [×]    │
+│ ⬜ Song Six — Artist F                [×]    │
+│ + 20 more pending                             │
+├──────────────────────────────────────────────┤
+│ [⏸ Pause]  [⏹ Stop]  [Minimize to Tray]     │
+│                                       [✕ Back]│
+└──────────────────────────────────────────────┘
+```
 
-This tool works by using a playlist exported as a **CSV** file. If you already have a compatible `.CSV` file, skip to Part 2.
+- **No settings visible** — no format dropdowns, search bars, or batch panels to slow things down
+- **Culled track list** — only the currently-downloading track + next 5 pending; the rest are counted (`+ N more pending`)
+- **Dramatically less rendering** — ~80 widgets hidden during download
+- **Pause / Stop / Back to Settings** once complete
 
-### **Part 1: Exporting Your Playlist (via TuneMyMusic)**
+### spotDL v4 support
 
-1. Go to [**TuneMyMusic**](https://www.tunemymusic.com) and select **Spotify** as the source.
+Updated for **spotDL 4.5.0** — new CLI syntax, `download` subcommand, `{title}.{ext}` output templates. Auto-detects spotdl even when running from the venv.
 
-   <img width="1914" height="958" alt="image" src="https://github.com/user-attachments/assets/86294d76-b438-4172-b88a-7193a4d6229b" />
+### .lrc lyrics files
 
-2. Log into Spotify. (This service is verified and safe; no personal data is transferred outside of the files you choose.) Once logged in, click **"Load from Spotify account"**.
+Checking "Lyrics" now generates standalone `.lrc` files alongside your audio tracks, viewable in VLC, MusicBee, and most players.
 
-   <img width="943" height="566" alt="image" src="https://github.com/user-attachments/assets/4c8d1b34-18c1-4e3d-8155-89afb5381d59" />
+---
 
-3. Select the playlists and/or individual songs you want to download. Click **"Choose Destination"**.
+## Features
 
-   <img width="943" height="566" alt="image" src="https://github.com/user-attachments/assets/060d8432-12e5-474b-a0eb-4acdf5c753ed" />
+### Input methods
 
-4. Scroll down, select **"Export to file"**, and choose **CSV**.
+| Mode | What it does |
+|---|---|
+| **Smart (auto-detect)** | Paste any Spotify URL — track, album, playlist, artist — app figures out what to do |
+| **Spotify Link** | Paste a playlist URL directly |
+| **Search** | Search Spotify by track/album/artist name, pick results, add to queue |
+| **CSV / TXT** | Import playlists exported from [TuneMyMusic](https://www.tunemymusic.com) or similar |
 
-   <img width="891" height="678" alt="image" src="https://github.com/user-attachments/assets/8dafca8d-6ca8-40e8-96e5-c27f0259243d" />
-   <img width="719" height="538" alt="image" src="https://github.com/user-attachments/assets/6b08b64d-a00f-478e-82b5-8c388ee188fe" />
+### Download options
 
-5. Click **"Start Transfer"** to download your playlist as a `.csv` file.
+- **Format**: mp3, flac, ogg, opus, m4a, wav
+- **Bitrate**: grouped presets (Low/Medium/High/Very High) with fine-tune expand for exact bitrate
+- **Lyrics**: optional download with `.lrc` generation and provider selection (genius, musixmatch, azlyrics, synced)
+- **Folder structure**: by playlist / by artist & album / flat
+- **Concurrent downloads**: how many tracks to download at once (default: 10)
+- **Delete empty folders**: auto-cleanup after download
+- **File size estimation**: per-track (~X MB/3min) + total estimated size
 
-   <img width="307" height="300" alt="image" src="https://github.com/user-attachments/assets/eb8159a9-b5c8-4db9-910c-8b5a2edfb440" />
+### Queue & control
 
-### **Part 2: Using the GUI Downloader**
+- **Batch queue**: add multiple playlists, choose sequential or parallel mode
+- **Per-track control**: cancel individual tracks with a × button
+- **Pause / Resume**: pause the entire queue, resume later
+- **Stop**: graceful shutdown mid-download
+- **Track list**: live status icons (⬜ pending, ▶ downloading, ✅ done, ❌ failed, ⏹ cancelled)
 
-6. Open the **Spotify Downloader GUI**.
+### Scheduling
 
-   <img width="458" height="42" alt="image" src="https://github.com/user-attachments/assets/ffa4cb30-9363-4b12-8e60-7dfd8890ff69" />
+- **One-time schedule**: set a date/time for downloads to auto-start
+- **Playlist watcher**: periodically check a playlist for new tracks
 
-7. At the top, ensure **CSV/TXT** is selected from the dropdown menu.
+### Presets
 
-   <img width="904" height="71" alt="image" src="https://github.com/user-attachments/assets/c655ce14-5658-4194-a931-4bce73faf4ca" />
+- Save your settings (format, bitrate, output folder, etc.) as named presets
+- Auto-loads the last used preset on startup
+- Switch between presets with a dropdown
 
-8. Click the **Select folder** button and choose your desired output folder.
+### Spotify integration
 
-   <img width="904" height="45" alt="image" src="https://github.com/user-attachments/assets/07c70023-18d2-4c60-af0f-6f716052d640" />
+- **Sign in with Spotify** via browser OAuth (PKCE — no passwords shared)
+- Search Spotify's catalog from inside the app
+- Access private playlists, liked songs, and saved albums
+- Token cached in `~/.config/spotdl-gui/`
 
-9. Enter a name for the sub-folder that will contain the downloads (Default: `Spotify Downloads`).
+### Notifications
 
-   <img width="904" height="31" alt="image" src="https://github.com/user-attachments/assets/a662b15b-0528-43ab-86f6-8e52647f1e19" />
+Choose when to get desktop alerts:
 
-10. Choose whether you want to delete empty folders. **Note:** This option applies to *all* empty folders within the selected output directory.
+| Option | Behavior |
+|---|---|
+| On complete only | One notification when all downloads finish |
+| On complete + on error | Notification on finish + per-failure alerts |
+| Every track + done | Notification for each track (warning shown for >10 tracks) |
 
-    <img width="904" height="31" alt="image" src="https://github.com/user-attachments/assets/d9f1a45a-d3aa-4c2f-a2d8-3abc0cad49e3" />
+### System tray
 
+Minimize to tray — downloads continue in the background.  
+*Requires `pip install pystray` in the venv.*
 
-11. Choose if how many songs you want to download concurrently.
+### Export as shell script
 
-   <img width="247" height="38" alt="image" src="https://github.com/user-attachments/assets/dae5a198-d682-461b-b107-3d8f91737c3e" />
+Generate a `.sh` script from your download queue. SCP it to a server and run:
 
+```bash
+scp download.sh user@server:/tmp/
+ssh user@server bash /tmp/download.sh
+```
 
-12. Finally, click the button to select the **CSV** file you exported earlier.
+### Resume
 
-    <img width="904" height="45" alt="image" src="https://github.com/user-attachments/assets/73d32ca8-efc2-4c67-9c08-c6276475c2f8" />
+Close the app mid-download? State is saved to `~/.cache/spotdl-gui/resume.json`.  
+Next launch shows: *"Unfinished download found! Resume?"* — picks up where you left off, including progress, settings, and queue.
 
-13. Click **Start Download** and watch it work!
+---
 
-## 🚀 Key Features
+## What's in the box
 
-* **Full GUI** with a sleek, dark Spotify aesthetic.
+| File | Purpose |
+|---|---|
+| `SpDL.py` | The GUI application |
+| `cli.py` | Headless CLI downloader |
+| `setup.sh` | Linux/macOS — one-step install |
+| `setup.bat` | Windows — one-step install |
+| `start.sh` | Linux/macOS launcher |
+| `start.bat` | Windows launcher |
+| `requirements.txt` | Python dependencies |
+| `setup.html` | Visual setup guide (open in browser) |
+| `venv/` | Isolated environment (created by setup) |
 
-* **Auto-Setup:** Automatically installs all required dependencies (`spotDL`, `FFmpeg`, and `Mutagen`) on first run.
+---
 
-* **Robust Logging:** Generates timestamped **JSON logs** with full track info and Spotify URLs for verification and retries.
+## How to use
 
-* **Cross-Platform:** Works out-of-the-box on **Windows**, **Debian/Ubuntu**, and **Manjaro/Arch**. (Tested primarily on Arch Linux!)
+### 1. Sign in (optional — enables search + private playlists)
 
-## 🖼️ Look and Feel
+![Sign in button in top bar](screenshots/signin-button.png)
 
-* **Intuitive Interface:** A user-friendly UI that anyone can master in seconds.
+Click **"Sign in with Spotify ▸"** in the top-right corner. On first run, a wizard guides you through creating a Spotify App and pasting your Client ID. After that, clicking Sign In opens your browser — authorize once and the token is cached.
 
-  <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/1f1963e3-8bd8-4da3-acce-013921f85a8e" />
+> **One-time setup**: go to [developer.spotify.com/dashboard](https://developer.spotify.com/dashboard), create an app, set redirect URI to `http://localhost:8888/callback`, copy the Client ID. That's it — no Client Secret needed (PKCE).
 
-## 💾 Logs & Verification
+### 2. Add tracks
 
-Each download session creates a timestamped log file in the following format:
+#### Smart mode (recommended)
 
-`download_log_YYYY-MM-DD_HH-MM-SS.json`
+```
+┌──────────────────────────────────────────────┐
+│ Input: [Smart (auto-detect) ▼]               │
+│ Paste any Spotify URL: [__________________]  │
+│                                    (Track)   │
+│                                        [Add]  │
+└──────────────────────────────────────────────┘
+```
 
-This file contains **full track information** and **Spotify URLs**, which is useful for verifying downloads or attempting manual retries.
+Paste any Spotify URL — the app detects whether it's a track, album, playlist, or artist and handles it accordingly. Individual tracks go straight to the queue; albums/playlists/artists are added to the batch queue.
 
-## 🪩 License & Credits
+#### Search mode
 
-© 2025 Minxify_ig. All rights reserved.
+```
+┌──────────────────────────────────────────────┐
+│ Input: [Search ▼]                             │
+│ Search: [_________________________] [Search]  │
+│ ┌─ Results ──────────────────────────────┐   │
+│ │ ☐ 🎵 Song One — Artist A               │   │
+│ │ ☐ 💿 Album Name — Artist B             │   │
+│ │ ☐ 👤 Artist Name                       │   │
+│ └────────────────────────────────────────┘   │
+│ [Add Selected to Queue]                       │
+└──────────────────────────────────────────────┘
+```
 
-Built with 💚 using:
+Switch to **Search** mode, type a query, browse results, check what you want, and add them to the queue.
 
-* [spotDL](https://github.com/spotDL/spotify-downloader) (for the core downloading logic)
+#### Playlist Link / CSV
 
-* [Mutagen](https://mutagen.readthedocs.io/) (for audio metadata handling)
+Same as before — paste a playlist URL or select a CSV/TXT file exported from TuneMyMusic.
+
+### 3. Configure settings
+
+```
+Format: [mp3 ▼]  Bitrate: [Very High (224k-320k) ▼] [Fine tune ▾]
+Folder: [By playlist ▼]  Lyrics: [☑] [genius ▼]  Concurrent: [10]
+Notify: [On complete only ▼]  ☐ Delete empty folders
+```
+
+- Pick audio format and quality
+- Choose folder structure
+- Toggle lyrics with `.lrc` generation
+- Save as a preset for next time
+
+### 4. Batch queue (optional)
+
+```
+Batch Queue
+URL: [__________________________] [Add to Queue]
+[Sequential ▼] [Clear All]
+┌─ Queue ────────────────────────────┐
+│ • playlist: My Playlist 1    [×]   │
+│ • album: Cool Album          [×]   │
+└────────────────────────────────────┘
+```
+
+Add multiple playlists/albums. Sequential mode processes them one by one; Parallel runs them simultaneously.
+
+### 5. Download
+
+Click **▶ Start Download**. The app switches to download view:
+
+```
+┌─ Download Progress ──────────────────────────┐
+│ ▓▓▓▓▓▓▓▓▓▓░░░░░░░░░  12 / 25 (48.0%)        │
+│ ETA: 2m 35s  |  Est. ~180MB  |  Errors: 0   │
+│ Current: Song Title — Artist                  │
+├─ Track Queue ────────────────────────────────┤
+│ ▶ Song One — Artist A                [×]    │
+│ ⬜ Song Two — Artist B                [×]    │
+│ ⬜ Song Three — Artist C              [×]    │
+│ ⬜ Song Four — Artist D               [×]    │
+│ ⬜ Song Five — Artist E               [×]    │
+│ ⬜ Song Six — Artist F                [×]    │
+│ + 20 more pending                             │
+├──────────────────────────────────────────────┤
+│ [⏸ Pause]  [⏹ Stop]  [Minimize to Tray]     │
+│                                       [✕ Back]│
+└──────────────────────────────────────────────┘
+```
+
+No settings visible — just progress, ETA, size estimate, and the active download queue. Click **✕ Back** to return to settings once complete.
+
+### 6. CLI mode
+
+```bash
+python cli.py --input playlist.csv --format flac --output ./music
+python cli.py --input "https://open.spotify.com/playlist/..." --bitrate 320k
+python cli.py --input "saved" --format opus --lyrics genius
+```
+
+Headless downloader for servers/remote machines. Same engine as the GUI.
+
+---
+
+## Logs
+
+Errors are written to timestamped `ERROR_*.log` files in the parent of your output directory. Each entry shows which track failed and why.
+
+---
+
+## Notes
+
+- The app uses `customtkinter` for a modern dark UI
+- Downloads use [spotDL](https://github.com/spotDL/spotify-downloader) v4 under the hood
+- Settings live in `~/.config/spotdl-gui/` (presets, Spotify token, credentials)
+- Cache/resume state lives in `~/.cache/spotdl-gui/`
+- Large playlists with "Every track + done" notifications show a warning before proceeding
+- Pystray system tray support is optional: `pip install pystray` (inside the venv)
+
+---
+
+## Screenshots
+
+> Drop your screenshots into a `screenshots/` folder and link them here.
+
+| Feature | Screenshot |
+|---|---|
+| Main window — config view | `screenshots/main-window.png` |
+| Download progress view | `screenshots/download-view.png` |
+| Search results | `screenshots/search-results.png` |
+| Smart URL detection | `screenshots/smart-detect.png` |
+| Batch queue with multiple playlists | `screenshots/batch-queue.png` |
+| Preset selector | `screenshots/presets.png` |
+| Schedule dialog | `screenshots/schedule.png` |
+| Track list with statuses | `screenshots/track-list.png` |
+| OAuth sign-in wizard | `screenshots/oauth-wizard.png` |
+| CLI help output | `screenshots/cli-help.png` |
+
+---
+
+© 2026 Minxify_ig
