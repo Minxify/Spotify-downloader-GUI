@@ -298,19 +298,21 @@ Errors are written to timestamped `ERROR_*.log` files in the parent of your outp
 
 ## Screenshots
 
-> Drop your screenshots into a `screenshots/` folder and link them here.
 
 | Feature | Screenshot |
 |---|---|
-| Main window — config view | `screenshots/main-window.png` |
+| Main window — config view | <img width="1127" height="929" alt="image" src="https://github.com/user-attachments/assets/417b9c8f-6e36-4742-a42f-3bac8d9fe5a5" />
+ |
 | Download progress view | `screenshots/download-view.png` |
 | Search results | `screenshots/search-results.png` |
 | Smart URL detection | `screenshots/smart-detect.png` |
 | Batch queue with multiple playlists | `screenshots/batch-queue.png` |
-| Preset selector | `screenshots/presets.png` |
-| Schedule dialog | `screenshots/schedule.png` |
+| Preset selector | <img width="257" height="170" alt="image" src="https://github.com/user-attachments/assets/f132fb6c-af51-447e-bdb9-95986ba72104" />
+ |
+| Schedule dialog | <img width="401" height="341" alt="image" src="https://github.com/user-attachments/assets/9b569eaf-b08b-43bf-a6c9-b43232c2996b" />
+ |
 | Track list with statuses | `screenshots/track-list.png` |
-| OAuth sign-in wizard | `screenshots/oauth-wizard.png` |
+| OAuth sign-in wizard | Currently broken |
 | CLI help output | `screenshots/cli-help.png` |
 
 ---
