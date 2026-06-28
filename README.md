@@ -6,7 +6,8 @@ Search, paste a link, or import CSV — with concurrent downloads, format select
 By [Minxify_ig](https://minxie.likesyou.org) | [GitHub](https://github.com/Minxify/Spotify-downloader-GUI)
 
 ---
-
+# New! Android is now a supported platform! click [HERE](https://github.com/Minxify/Spotify-downloader-GUI/releases/tag/AV1.0.3)
+if on a pc ignore this message!
 ## Quick Start
 
 ```bash
